@@ -24,10 +24,6 @@ app.use(errorHandler);
 const start = async () => {
     try {
         await mongoose.connect("mongodb://localhost:27017/PizzaStore");
-        // let a = await User.find({ email: "ddsda" });
-        // console.log("====================================");
-        // console.log(a);
-        // console.log("====================================");
         app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
     } catch (e) {
         console.log(e);

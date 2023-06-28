@@ -14,10 +14,11 @@ class PizzaController {
                 ingredients,
                 image,
                 status: "В наличии",
-                category
+                category,
             });
+            const pizzas = await Pizza.find();
 
-            return res.json({ pizza });
+            return res.json(pizzas);
         } catch (e) {
             return ApiError.badRequest(e.message);
         }
@@ -25,12 +26,13 @@ class PizzaController {
 
     async updateStatus(req, res) {
         try {
-            const { status, id } = req.body;
+            const { name, price, weight, ingredients, image, category, status } =
+                req.body;
             const pizza = await Pizza.updateOne(
                 { _id: id },
-                { status: status }
+                { name, price, weight, ingredients, image, category, status }
             );
-            return res.json({ pizza });
+            return res.json( pizza );
         } catch (e) {
             return ApiError.badRequest(e.message);
         }
@@ -41,6 +43,17 @@ class PizzaController {
             const pizzas = await Pizza.find();
 
             return res.json({ pizzas });
+        } catch (e) {
+            return ApiError.badRequest(e.message);
+        }
+    }
+
+    async deletePizza(req, res) {
+        try {
+            const { _id } = req.query;
+            await Pizza.deleteOne({ _id });
+            const pizzas = await Pizza.find();
+            return res.json(pizzas);
         } catch (e) {
             return ApiError.badRequest(e.message);
         }

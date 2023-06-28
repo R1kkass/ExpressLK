@@ -8,5 +8,6 @@ const pizzaController = require("../controller/pizzaController");
 router.post("/create", pizzaController.createPizza);
 router.post("/update", pizzaController.updateStatus);
 router.get("/getall", pizzaController.getAll);
+router.delete("/delete", pizzaController.deletePizza);
 
 module.exports = router;

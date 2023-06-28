@@ -7,6 +7,7 @@ const Pizza = new Schema({
     image: { type: String, required: true },
     weight: { type: String, required: true },
     status: { type: String, required: true },
+    category: { type: String, required: true },
 });
 
 module.exports = model("Pizza", Pizza);

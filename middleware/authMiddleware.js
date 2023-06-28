@@ -10,8 +10,8 @@ module.exports = function (){
             if (!token) {
                 return res.status(402).json({message: "Вы не авторизованы", bool: false})
             }
-            const decoded = jwt.verify(token, process.env.SECRET_KEY)
-            return res.status(200).json({message: "Авторизованы", bool: true})
+            console.log(token);
+            next()
         } catch(e){
             return res.status(401).json({message: "Вы не авторизованы", bool: false})
         }
