@@ -1,18 +1,25 @@
 const ApiError = require("../error/ApiError");
 const Pizza = require("../migrations/Pizza");
+const uuid = require("uuid");
+const path = require("path");
+const fs = require("fs");
+const { dirname } = require("path");
 
 class PizzaController {
     async createPizza(req, res) {
         try {
-            const { name, price, weight, ingredients, image, category } =
-                req.body;
+            const { name, price, weight, ingredients, category } = req.body;
+            const { file } = req.files;
+            let fileNames = uuid.v4();
+            const loc = path.resolve(__dirname, "..", "static", fileNames);
 
-            const pizza = await Pizza.create({
+            file.mv(loc);
+            await Pizza.create({
                 name,
                 price,
                 weight,
                 ingredients,
-                image,
+                image: `http://localhost:5001/${fileNames}`,
                 status: "В наличии",
                 category,
             });
@@ -26,13 +33,43 @@ class PizzaController {
 
     async updateStatus(req, res) {
         try {
-            const { name, price, weight, ingredients, image, category, status } =
-                req.body;
-            const pizza = await Pizza.updateOne(
-                { _id: id },
-                { name, price, weight, ingredients, image, category, status }
+            const {
+                name,
+                price,
+                weight,
+                ingredients,
+                image,
+                category,
+                status,
+                _id,
+            } = req.body;
+            let fileNames;
+            if (req?.files?.file) {
+                const { file } = req.files;
+                console.log(fileNames);
+
+                fileNames = uuid.v4() + file.name.split(" ").join("");
+                const loc = path.resolve(__dirname, "..", "static", fileNames);
+
+                file.mv(loc);
+            }
+            await Pizza.updateOne(
+                { _id },
+                {
+                    name,
+                    price,
+                    weight,
+                    ingredients,
+                    image: fileNames
+                        ? `http://localhost:5001/${fileNames}`
+                        : image,
+                    category,
+                    status,
+                }
             );
-            return res.json( pizza );
+            const pizzas = await Pizza.find();
+
+            return res.json(pizzas);
         } catch (e) {
             return ApiError.badRequest(e.message);
         }

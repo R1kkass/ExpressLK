@@ -20,7 +20,7 @@ class OrderController {
                 apartment = "none",
                 phone,
                 count,
-                date
+                date,
             } = req.body;
             if (product.length) {
                 await Order.create({
@@ -36,7 +36,7 @@ class OrderController {
                     apartment,
                     phone,
                     count,
-                    date
+                    date,
                 });
                 await Basket.deleteMany({ basketId: decoded.basketId });
                 let result = await Basket.find({ basketId: decoded.basketId });
@@ -63,10 +63,20 @@ class OrderController {
             const token = req.headers.authorization.split(" ")[1];
             const decoded = jwt.verify(token, process.env.SECRET_KEY);
             req.user = decoded;
-            const order = await Order.find({userId: decoded.id});
+            const order = await Order.find({ userId: decoded.id });
             return res.json(order);
         } catch (e) {
             return ApiError.badRequest(e.message);
+        }
+    }
+
+    async admGetAll(req, res) {
+        try{
+            const order = await Order.find()
+            return res.json(order)
+        }catch(e) {
+            return ApiError.badRequest(e.message);
+
         }
     }
 }

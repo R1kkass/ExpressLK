@@ -7,7 +7,7 @@ const cors = require("cors");
 const router = require("./routes/index");
 const errorHandler = require("./middleware/ErrorHandlingMiddleware");
 const path = require("path");
-
+var fileupload = require("express-fileupload");
 const mongoose = require("mongoose");
 const User = require("./migrations/User");
 
@@ -16,6 +16,8 @@ app.use(cors({
     origin: "http://localhost:5173"
 }
 ));
+app.use(fileupload());
+
 app.use(express.json());
 app.use(express.static(path.resolve(__dirname, "static")));
 app.use("/api", router);

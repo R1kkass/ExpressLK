@@ -35,7 +35,6 @@ class UserController {
                 role: "USER",
                 basketId,
             });
-            let a = await User.find({ email: "ddsda" });
 
             const token = generateJwt(user.id, user.email, "USER", basketId);
             return res.json({ token });
@@ -84,11 +83,11 @@ class UserController {
                 req.headers.cookie.replace("refresh_token=", ""),
                 process.env.SECRET_KEY
             );
-
+            const user = await User.findOne({_id: decoded.id})
             const access_token = generateJwt(
                 decoded.id,
                 decoded.email,
-                decoded.role,
+                user.role,
                 decoded.basketId
             );
             return res.json({ access_token });

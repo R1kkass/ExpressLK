@@ -12,6 +12,7 @@ const Order = new Schema({
     house: { type: String, required: true },
     apartment: { type: String },
     status: { type: String, required: true },
+    city: { type: String, required: true },
     date: { type: String, required: true },
 });
 
