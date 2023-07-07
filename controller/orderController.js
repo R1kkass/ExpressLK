@@ -51,7 +51,9 @@ class OrderController {
     async updateOrder(req, res) {
         try {
             const { status, id } = req.body;
-            const order = await Order.updateOne({ _id: id }, { status });
+            await Order.updateOne({ _id: id }, { status });
+            const order = await Order.find();
+
             return res.json(order);
         } catch (e) {
             return ApiError.badRequest(e.message);

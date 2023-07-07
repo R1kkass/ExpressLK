@@ -2,17 +2,15 @@ const ApiError = require("../error/ApiError");
 const Pizza = require("../migrations/Pizza");
 const uuid = require("uuid");
 const path = require("path");
-const fs = require("fs");
-const { dirname } = require("path");
 
 class PizzaController {
     async createPizza(req, res) {
         try {
             const { name, price, weight, ingredients, category } = req.body;
             const { file } = req.files;
-            let fileNames = uuid.v4();
+            let fileNames = uuid.v4() + file.name.split(" ").join("");
             const loc = path.resolve(__dirname, "..", "static", fileNames);
-
+            
             file.mv(loc);
             await Pizza.create({
                 name,
@@ -46,7 +44,6 @@ class PizzaController {
             let fileNames;
             if (req?.files?.file) {
                 const { file } = req.files;
-                console.log(fileNames);
 
                 fileNames = uuid.v4() + file.name.split(" ").join("");
                 const loc = path.resolve(__dirname, "..", "static", fileNames);

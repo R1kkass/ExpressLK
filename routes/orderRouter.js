@@ -6,8 +6,8 @@ const checkMiddleWare = require("../middleware/checkMiddleWare");
 
 
 router.post("/addorder", authMiddleware(), orderController.addOrder);
-router.get("/getalladm", checkMiddleWare('USER'), orderController.admGetAll);
-router.put("/updateorder", orderController.updateOrder);
+router.get("/getalladm", checkMiddleWare('ADMIN'), orderController.admGetAll);
+router.put("/updateorder", checkMiddleWare('ADMIN'), orderController.updateOrder);
 router.get("/getall", orderController.getAll);
 
 module.exports = router;

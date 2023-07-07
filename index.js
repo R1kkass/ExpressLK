@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const sequelize = require("./db");
 const PORT = process.env.PORT || 5000;
 const app = express();
 const cors = require("cors");
@@ -13,7 +12,7 @@ const User = require("./migrations/User");
 
 app.use(cors({
     credentials: true,
-    origin: "http://localhost:5173"
+    origin: process.CORS_DOMEN || "http://localhost:5173"
 }
 ));
 app.use(fileupload());
@@ -25,7 +24,7 @@ app.use(errorHandler);
 
 const start = async () => {
     try {
-        await mongoose.connect("mongodb://localhost:27017/PizzaStore");
+        await mongoose.connect("mongodb://root:example@mongo:27017/PizzaStore");
         app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
     } catch (e) {
         console.log(e);
