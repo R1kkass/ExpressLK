@@ -16,7 +16,9 @@ class BasketController {
                     { _id: basketFind._id },
                     {
                         count,
-                        price: String(Number(basketFind.product.price) * Number(count)),
+                        price: String(
+                            Number(basketFind.product.price) * Number(count)
+                        ),
                     }
                 );
             } else {
