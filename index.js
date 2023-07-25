@@ -13,7 +13,7 @@ const User = require("./migrations/User");
 app.use(
     cors({
         credentials: true,
-        origin: process.CORS_DOMEN || "http://localhost:5173",
+        origin: process.env.CORS_DOMEN || "http://localhost:5173",
     })
 );
 app.use(fileupload());
@@ -25,8 +25,15 @@ app.use(errorHandler);
 
 const start = async () => {
     try {
-        await mongoose.connect("mongodb://localhost:64000/PizzaStore");
-        app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+        await mongoose.connect(
+            // `mongodb://root:example@${process.env.DOMEN_NAME}:64000/PizzaStore`
+            `mongodb://root:example@${process.env.DOMEN_NAME}:64000`
+        );
+        app.listen(PORT, () =>
+            console.log(
+                `Server started on port ${PORT} ${process.env.CORS_DOMEN}`
+            )
+        );
     } catch (e) {
         console.log(e);
     }

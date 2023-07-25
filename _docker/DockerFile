@@ -7,7 +7,4 @@ COPY . ./
 RUN npm install
 RUN npm i bcrypt
 
-
-EXPOSE 4000
-
 CMD ["npm", "run", "dev"]
