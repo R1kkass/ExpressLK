@@ -13,7 +13,7 @@ const User = require("./migrations/User");
 app.use(
     cors({
         credentials: true,
-        origin: process.env.CORS_DOMEN || "http://localhost:5173",
+        origin: process.env.CORS_DOMEN || "http://37.140.195.252:8083",
     })
 );
 app.use(fileupload());
