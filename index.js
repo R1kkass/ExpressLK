@@ -27,7 +27,7 @@ const start = async () => {
     try {
         await mongoose.connect(
             // `mongodb://root:example@${process.env.DOMEN_NAME}:64000/PizzaStore`
-            `mongodb://rikka:25122004@cluster0.otrpalk.mongodb.net/PizzaStore`
+            `mongodb://localhost:27017/PizzaStore`
         );
         app.listen(PORT, () =>
             console.log(
