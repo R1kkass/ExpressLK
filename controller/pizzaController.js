@@ -58,7 +58,7 @@ class PizzaController {
                     weight,
                     ingredients,
                     image: fileNames
-                        ? `http://localhost:5001/${fileNames}`
+                        ? `http://37.140.195.252:5001/${fileNames}`
                         : image,
                     category,
                     status,
