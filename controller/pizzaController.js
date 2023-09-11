@@ -17,7 +17,7 @@ class PizzaController {
                 price,
                 weight,
                 ingredients,
-                image: `http://localhost:5001/${fileNames}`,
+                image: `http://37.140.195.252:5001/${fileNames}`,
                 status: "В наличии",
                 category,
             });
