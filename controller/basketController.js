@@ -57,7 +57,7 @@ class BasketController {
                 {
                     count: count || 1,
                     price: String(
-                        Number(bask.price) * Number(count || 1)
+                        Number(bask?.defaultPrice || bask?.price) * Number(count || 1)
                     ),
                 }
             );
