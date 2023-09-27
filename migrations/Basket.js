@@ -6,7 +6,7 @@ const Basket = new Schema({
     product: { type: Schema.Types.Mixed, required: true },
     count: { type: Number, required: true },
     productId: {type: String, required: true},
-    defaultPrice: {type: String, required: true}
+    defaultPrice: {type: String, required: false}
 });
 
 module.exports = model("Basket", Basket);
