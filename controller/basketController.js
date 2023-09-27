@@ -17,7 +17,7 @@ class BasketController {
                     {
                         count,
                         price: String(
-                            Number(basketFind.product.price) * Number(count)
+                            Number(basketFind.product?.defaultPrice || basketFind.product?.price) * Number(count)
                         ),
                     }
                 );
@@ -28,6 +28,7 @@ class BasketController {
                     basketId,
                     count,
                     productId: product._id,
+                    defaultPrice: price
                 });
             }
             return res.json(basket);
