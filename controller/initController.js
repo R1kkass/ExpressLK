@@ -7,10 +7,15 @@ class InitController {
         try {
             const hashPassword = await bcrypt.hash("12345", 5);
             const user = await User.create({
-                email: "Rikka2",
+                login: "director",
                 password: hashPassword,
-                role: "ADMIN",
-                basketId: Date.now(),
+                jobTitle: "Директор",
+                name: "Имя",
+                secondName: "Фамилия",
+                lastName: "Отчество",
+                numberPhone: "8899988899",
+                photo: "ds",
+                date: "2023-12-23",
             });
             return res.json(user);
         } catch (e) {

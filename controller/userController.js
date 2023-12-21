@@ -5,48 +5,66 @@ const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
 const mongoose = require("mongoose");
 
-const generateJwt = (id, email, role, basketId, time) => {
-    return jwt.sign({ id, email, role, basketId }, process.env.SECRET_KEY, {
+const generateJwt = (id, email, jobTitle, time) => {
+    return jwt.sign({ id, email, jobTitle }, process.env.SECRET_KEY, {
         expiresIn: time || "30m",
     });
 };
 
 class UserController {
     async registration(req, res, next) {
-        try {
-            const { email, password, basketId } = req.body;
-            if (!email || !password || !basketId) {
-                return next(
-                    ApiError.badRequest("Некорректный email или password")
-                );
+            const {
+                name,
+                password,
+                login,
+                secondName,
+                lastName,
+                numberPhone,
+                date,
+                photo,
+                jobTitle,
+            } = req.body;
+            if (
+                !password ||
+                !login ||
+                !name ||
+                !secondName ||
+                !lastName ||
+                !numberPhone ||
+                !date
+            ) {
+                return next(ApiError.badRequest("Некорректный данные"));
             }
-            const candidate = await User.findOne({ email });
+            const candidate = await User.findOne({ login });
             if (candidate) {
                 return next(
                     ApiError.badRequest(
-                        "Пользователь с таким email уже существует"
+                        "Пользователь с таким login уже существует"
                     )
                 );
             }
+
             const hashPassword = await bcrypt.hash(password, 5);
             const user = await User.create({
-                email,
+                name,
                 password: hashPassword,
-                role: "USER",
-                basketId,
+                login,
+                secondName,
+                lastName,
+                numberPhone,
+                jobTitle,
+                photo: "ds",
+                date,
             });
 
-            const token = generateJwt(user.id, user.email, "USER", basketId);
+            const token = generateJwt(user.id, user.login, jobTitle);
             return res.json({ token });
-        } catch (e) {
-            return ApiError.badRequest(e.message);
-        }
     }
 
     async login(req, res, next) {
         try {
-            const { email, password } = req.body;
-            const user = await User.findOne({ email });
+            const { login, password } = req.body;
+            const user = await User.findOne({ login });
             if (!user) {
                 return next(ApiError.internal("Пользователь не найден"));
             }
@@ -57,14 +75,12 @@ class UserController {
             const access_token = generateJwt(
                 user.id,
                 user.email,
-                user.role,
-                user.basketId
+                user.jobTitle,
             );
             const refresh_token = generateJwt(
                 user.id,
                 user.email,
-                user.role,
-                user.basketId,
+                user.jobTitle,
                 "30d"
             );
             res.cookie("refresh_token", refresh_token, {
@@ -83,12 +99,11 @@ class UserController {
                 req.headers.cookie.replace("refresh_token=", ""),
                 process.env.SECRET_KEY
             );
-            const user = await User.findOne({_id: decoded.id})
+            const user = await User.findOne({ _id: decoded.id });
             const access_token = generateJwt(
                 decoded.id,
                 decoded.email,
-                user.role,
-                decoded.basketId
+                user.jobTitle,
             );
             return res.json({ access_token });
         } catch (e) {
@@ -121,18 +136,7 @@ class UserController {
 
     async getAll(req, res) {
         try {
-            let { email, role, limit, page, pole, sort } = req.query;
-            email = email || "";
-            limit = limit || 10;
-            page = page || 1;
-            let offset = page * limit - limit;
-            role = role || "";
-            let user = await User.findAndCountAll({
-                where: { email: { [Op.like]: "%" + email + "%" } },
-                limit,
-                offset,
-                order: [[pole, sort]],
-            });
+            let user = await User.find();
             return res.json({ user });
         } catch (e) {
             return ApiError.badRequest(e.message);

@@ -1,10 +1,16 @@
-FROM node:latest
+FROM node:current-alpine
 
-WORKDIR /usr/src/express
+# Create app directory
+WORKDIR /usr/src/app
 
+# Install dependencies
+COPY package.json .
+RUN npm install
+RUN npm install bcrypt
+
+# Bundle app source
 COPY . ./
 
-RUN npm install
-RUN npm i bcrypt
-
-CMD ["npm", "run", "dev"]
+# Exports
+EXPOSE 5001
+CMD [ "npm", "run", "dev" ]
